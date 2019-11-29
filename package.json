@@ -1,0 +1,33 @@
+{
+  "name": "@resuelve/auth",
+  "version": "1.0.0",
+  "description": "Token Helper es la versión del resuelve-auth pero hecho 100% en node",
+  "main": "src/auth.js",
+  "scripts": {
+    "test": "jest --bail --runInBand --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resuelve/resuelve-auth-node.git"
+  },
+  "keywords": [
+    "Resuelve",
+    "Auth",
+    "Token"
+  ],
+  "author": "Carlos Flores <carlos@floresbenavides.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/resuelve/resuelve-auth-node/issues"
+  },
+  "homepage": "https://github.com/resuelve/resuelve-auth-node#readme",
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "standard": "^14.3.1"
+  },
+  "standard": {
+    "env": {
+      "jest": true
+    }
+  }
+}
