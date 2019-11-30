@@ -41,13 +41,15 @@ describe('Token Helper Success', () => {
   beforeEach(() => {
     delete global.window
   })
-  it('should verify a token in browser', () => {
+  it('should parse a token in browser', () => {
     global.window = {
       atob: (str) => Buffer.from(str, 'base64').toString('binary')
     }
     const auth = new Auth(data)
     const token = auth.generateToken()
-    expect(auth.verifyToken(token)).toBe(true)
+    const dataNoSecret = { ...data }
+    delete dataNoSecret.secret
+    expect(auth.parseToken(token)).toEqual(dataNoSecret)
   })
   it('should generate a verified token', () => {
     const auth = new Auth(data)
