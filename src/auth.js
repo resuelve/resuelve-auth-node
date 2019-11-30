@@ -1,25 +1,27 @@
-const crypto = require('crypto')
-
 class Auth {
   constructor (meta) {
-    if (!meta || !meta.secret) throw new Error('secret is required')
+    if (typeof meta === 'undefined') meta = {}
+    if (typeof window === 'undefined') {
+      if (!meta || !meta.secret) throw new Error('secret is required')
+    }
     this.meta = meta
   }
 
   _signature (string) {
-    return crypto
+    return require('crypto')
       .createHmac('sha256', this.meta.secret)
       .update(string)
       .digest('hex')
       .toUpperCase()
   }
 
-  _data2string (data, timestamp = new Date().getTime()) {
+  _data2string (data, timestamp = new Date().getTime(), expiration = 315.36e8) {
     const payload = {
       service: this.meta.service,
       role: this.meta.role,
       session: this.meta.session,
-      timestamp: this.meta.timestamp || timestamp,
+      timestamp: parseInt(this.meta.timestamp, 10) || timestamp,
+      expiration: parseInt(this.meta.expiration, 10) || expiration,
       meta: data
     }
     const string = JSON.stringify(payload)
@@ -32,8 +34,10 @@ class Auth {
   parseToken (token) {
     const [data] = token.split('.')
     const cleaned = data.replace(/_/g, '/').replace(/-/g, '+')
-    const base64 = Buffer.from(cleaned, 'base64').toString('binary')
-    const encoded = [...base64]
+    const string = typeof window !== 'undefined'
+      ? window.atob(cleaned)
+      : Buffer.from(cleaned, 'base64').toString('binary')
+    const encoded = [...string]
       .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
       .join('')
     const decoded = decodeURIComponent(encoded)
@@ -46,11 +50,13 @@ class Auth {
     try {
       dataParsed = this.parseToken(token)
     } catch (error) {
-      dataParsed = error
+      return false
     }
-    const string = this._data2string(dataParsed.meta, dataParsed.timestamp)
+    const { meta, timestamp, expiration } = dataParsed
+    const string = this._data2string(meta, timestamp, expiration)
     const signature = this._signature(string)
-    return sign === signature
+    if (sign !== signature) return false
+    return expiration + timestamp > new Date().getTime()
   }
 
   generateToken (data) {
