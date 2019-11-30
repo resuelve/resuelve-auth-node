@@ -41,6 +41,9 @@ describe('Token Helper Success', () => {
   beforeEach(() => {
     delete global.window
   })
+  it('should not throw error when no secret defined', () => {
+    expect(() => new Auth()).not.toThrow()
+  })
   it('should parse a token in browser', () => {
     global.window = {
       atob: (str) => Buffer.from(str, 'base64').toString('binary')
