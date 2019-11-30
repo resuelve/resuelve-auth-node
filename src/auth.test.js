@@ -17,6 +17,7 @@ const meta = {
 
 describe('Token Helper Error', () => {
   it('should throw error when no secret defined', () => {
+    delete global.window
     expect(() => new Auth({})).toThrow()
   })
   it('should fail when token is invalid', () => {
@@ -41,7 +42,10 @@ describe('Token Helper Success', () => {
   beforeEach(() => {
     delete global.window
   })
-  it('should not throw error when no secret defined', () => {
+  it('should not throw error when no secret defined in browser', () => {
+    global.window = {
+      atob: (str) => Buffer.from(str, 'base64').toString('binary')
+    }
     expect(() => new Auth()).not.toThrow()
   })
   it('should parse a token in browser', () => {

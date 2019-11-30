@@ -1,7 +1,7 @@
 class Auth {
   constructor (meta) {
     if (typeof meta === 'undefined') meta = {}
-    if (typeof window !== 'undefined') {
+    if (typeof window === 'undefined') {
       if (!meta || !meta.secret) throw new Error('secret is required')
     }
     this.meta = meta
