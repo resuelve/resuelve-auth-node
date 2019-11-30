@@ -1,6 +1,6 @@
 const crypto = require('crypto')
 
-class TokenHelper {
+class Auth {
   constructor (meta) {
     if (!meta || !meta.secret) throw new Error('secret is required')
     this.meta = meta
@@ -60,4 +60,4 @@ class TokenHelper {
   }
 }
 
-module.exports = TokenHelper
+module.exports = Auth

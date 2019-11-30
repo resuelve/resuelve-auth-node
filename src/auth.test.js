@@ -1,4 +1,4 @@
-const TokenHelper = require('./auth')
+const Auth = require('./auth')
 
 const data = {
   service: 'my service',
@@ -16,24 +16,24 @@ const meta = {
 
 describe('Token Helper Error', () => {
   it('should throw error when no secret defined', () => {
-    expect(() => new TokenHelper({})).toThrow()
+    expect(() => new Auth({})).toThrow()
   })
   it('should fail when token is invalid', () => {
-    const tokenHelper = new TokenHelper({ secret: 'test secret' })
-    expect(tokenHelper.verifyToken('caca')).toBe(false)
+    const auth = new Auth({ secret: 'test secret' })
+    expect(auth.verifyToken('caca')).toBe(false)
   })
 })
 
 describe('Token Helper Success', () => {
   it('should generate a verified token', () => {
-    const tokenHelper = new TokenHelper(data)
-    const token = tokenHelper.generateToken()
-    expect(tokenHelper.verifyToken(token)).toBe(true)
+    const auth = new Auth(data)
+    const token = auth.generateToken()
+    expect(auth.verifyToken(token)).toBe(true)
   })
   it('should return same data as provided', () => {
-    const tokenHelper = new TokenHelper(data)
-    const token = tokenHelper.generateToken(meta)
-    const parsedData = tokenHelper.parseToken(token)
+    const auth = new Auth(data)
+    const token = auth.generateToken(meta)
+    const parsedData = auth.parseToken(token)
     const dataNoSecret = { ...data }
     delete dataNoSecret.secret
     expect(parsedData).toEqual({ meta, ...dataNoSecret })
