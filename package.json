@@ -1,6 +1,6 @@
 {
   "name": "@resuelve/auth",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Token Helper es la versión del resuelve-auth pero hecho 100% en node",
   "main": "src/auth.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/resuelve/resuelve-auth-node#readme",
   "devDependencies": {
-    "jest": "^24.9.0",
+    "jest": "^29.5.0",
     "standard": "^14.3.1"
   },
   "standard": {
